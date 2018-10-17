@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>범죄기록 데이터베이스</title>
 	<link href="./cssframework/css/bootstrap.min.css" rel="stylesheet">
-	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#login").click(function() {
@@ -39,7 +39,7 @@
 		</div>
 	</div>
 	<div class="center" style="position: absolute;top:50%;width: 100%;">
-		<form id="form1" action="./includes/procces.php" method="get">		
+		<form id="form1" action="./include/procces.php" method="get">		
 			<div class="input-group mb-3">
 				<input type="number" id="uid" class="form-control" placeholder="고유번호" aria-label="고유번호" aria-describedby="button-addon2">
 				<div class="input-group-append">
