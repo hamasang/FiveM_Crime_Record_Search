@@ -4,29 +4,40 @@
 
 	if(!is_numeric($product_name)) {
         echo "서버 접속 실패\n";
-        // ... 오류를 적절히 기록
     } else {
-		//DB접속 정보
-		$DB_HOST="localhost";
-		$DB_NAME="vrpfx";  //사용자의 DB이름
-		$DB_USER="root";  //사용자의 DB id
-		$DB_PASS="";  //사용자의 DB비밀번호
-		$DBcon = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
-		$DBcon->query("set names utf8");
-		date_default_timezone_set("Asia/Seoul");
-		header("Content-Type: text/html; charset=UTF-8");
 		
-		if(isset($product_name)){
-			$sql = "select * from vrp_user_identities join vrp_user_data ON vrp_user_identities.user_id='$product_name' WHERE vrp_user_data.user_id='$product_name' and vrp_user_data.dkey='vRP:police_records';";
-			$result = $DBcon->query($sql);
-			$row = $result->fetch_object();
-			if($row == ""){
-				echo "결과가 없습니다.";
-			}else{
-				echo "이름: ".$row->firstname." ".$row->name;
-				echo "<br/>전화번호: ".$row->phone;
-				echo "<br/>기록: ".$row->dvalue;
+		$servername = "localhost";
+		$db_name = "vrpfx";
+		$username = "root";
+		$password = "";
+
+		try {
+			$conn = new PDO("mysql:host=$servername;dbname=$db_name;charset=utf8", $username, $password,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+			// set the PDO error mode to exception
+			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			try{
+				$stmt = $conn->prepare("select * from vrp_user_identities join vrp_user_data ON vrp_user_identities.user_id=:uid WHERE vrp_user_data.user_id=:uid and vrp_user_data.dkey='vRP:police_records';");
+				$stmt->execute(array(
+					':uid' => $product_name
+				  ));
+				$article_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				$stmt=null;
+				if($conn == ""){
+					echo "결과가 없습니다.";
+				}else{
+					foreach ($article_list as $row => $link) {
+						echo "이름: ".$link['firstname']." ".$link['name'];
+						echo "<br/>전화번호: ".$link['phone'];
+						echo "<br/>기록: ".$link['dvalue'];
+					}
+				}
+			} catch(Exception $i){
+				echo "error";
+				echo "insert failed: ".$i->getMessage();
 			}
+		}catch(PDOException $e){
+			echo "Connection failed: " . $e->getMessage();
 		}
+		
 	}
 ?>
